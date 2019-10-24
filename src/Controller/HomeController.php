@@ -4,7 +4,6 @@ namespace App\Controller;
 use App\Form\AdvancedType;
 use App\Html\MarkdownParser;
 use App\Model\AdvancedModel;
-use Elastica\Type;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,19 +14,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class HomeController extends Controller
 {
-    /**
-     * @var Type
-     */
-    protected $serverFinder;
-
-    /**
-     * @param Type $serverFinder
-     */
-    public function setServerFinder(Type $serverFinder)
-    {
-        $this->serverFinder = $serverFinder;
-    }
-
     /**
      * @Route("/", name="home")
      *
@@ -42,12 +28,33 @@ class HomeController extends Controller
         $term    = trim($request->query->get('term'));
         $parser  = new MarkdownParser();
 
-        $model = new AdvancedModel();
-        $query = $this->requestToQuery($request, $model);
-        $terms = $this->splitTerms($term);
+        $model       = new AdvancedModel();
+        $query       = $this->requestToQuery($request, $model);
+        $terms       = $this->splitTerms($term);
+        $queryString = $model->toQueryString();
 
-        $from = ($page - 1) * 20;
-        $resp = $this->serverFinder->search($query, [
+        if ($type = $model->getType()) {
+            switch($type) {
+                case 's':
+                    $search = $this->indexManager->getIndex('sn_submissions')->createSearch();
+                    break;
+                case 'c':
+                    $search = $this->indexManager->getIndex('sn_comments')->createSearch();
+                    break;
+                default:
+                    $search = $this->indexManager->getIndex('sn_submissions')->createSearch();
+                    $search->addIndex('sn_comments');
+                    break;
+            }
+        } else {
+            $search = $this->indexManager->getIndex('sn_submissions')->createSearch();
+            if ($queryString) {
+                $search->addIndex('sn_comments');
+            }
+        }
+
+        $from  = ($page - 1) * 20;
+        $resp  = $search->search($query, [
             'from' => $from,
             'size' => 20 + $from
         ]);
@@ -71,7 +78,7 @@ class HomeController extends Controller
             'total'   => $total,
             'pages'   => $pages,
             'page'    => $page,
-            'query'   => $model->toQueryString()
+            'query'   => $queryString
         ]);
     }
 
@@ -83,14 +90,15 @@ class HomeController extends Controller
      */
     protected function requestToQuery(Request $request, AdvancedModel $model)
     {
-        $all = $request->query->all();
-        if (!$request->getQueryString() || (count($all) === 1 && isset($all['page']))) {
+        $all = array_filter($request->query->all());
+        if (!$all || (count($all) === 1 && isset($all['page']))) {
             return [
                 'sort' => [
                     'created' => 'desc'
                 ]
             ];
         }
+        unset($all['page']);
 
         $form = $this->createAdvancedForm($model);
         $form->submit($request->query->all());
@@ -159,6 +167,12 @@ class HomeController extends Controller
             unset($query['query']['bool']);
         }
 
+        if (!empty($all['author']) && empty($all['term'])) {
+            $query['sort'] = [
+                'created' => 'desc'
+            ];
+        }
+
         return $query;
     }
 
@@ -199,7 +213,7 @@ class HomeController extends Controller
     {
         $data = $this->redis->hMGet('flairsAndDomains', ['flairs', 'domains']);
         if (!$data || empty($data['flairs']) || empty($data['domains'])) {
-            $resp = $this->serverFinder->search(
+            $resp = $this->indexManager->getIndex('sn_submissions')->search(
                 [
                     'size' => 0,
                     'aggs' => [

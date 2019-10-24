@@ -1,0 +1,15 @@
+<li class="search-result">
+  <small class="search-result-meta">
+    Comment by&nbsp;
+    <a href="{{ path('home') }}?author={{ result.author|url_encode }}" class="search-result-meta-author">
+      /u/{{ result.author }}
+    </a>
+    &nbsp;&middot;&nbsp;
+    <span class="search-result-meta-date">
+      {{ result.created|date('M jS, Y') }}
+    </span>
+  </small>
+  <div class="search-result-text">
+    {{ result.text|highlight(terms[0]|default) }}
+  </div>
+</li>

@@ -5,6 +5,9 @@ fos_elastica:
         sn_submissions:
             types:
                 submission:
-                    properties:
-                        title: { boost: 10 }
-                        author: ~
+                    properties: ~
+
+        sn_comments:
+            types:
+                comment:
+                    properties: ~

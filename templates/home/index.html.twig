@@ -64,7 +64,11 @@
       {% else %}
         <ul class="search-results">
           {% for result in results %}
-            {% include "home/_blocks/result.html.twig" %}
+            {% if result.parent_id is defined %}
+              {% include "home/_blocks/comment.html.twig" %}
+            {% else %}
+              {% include "home/_blocks/submission.html.twig" %}
+            {% endif %}
           {% endfor %}
         </ul>
 

@@ -15,7 +15,7 @@
   </div>
 </div>
 
-<div class="row">
+<div class="row" style="margin-bottom: 15px;">
   <div class="col col-xl-6 offset-xl-3">
     {{ form_start(form) }}
     {{ form_row(form.term) }}
@@ -24,6 +24,7 @@
     {{ form_row(form.domain) }}
     {{ form_row(form.startDate) }}
     {{ form_row(form.endDate) }}
+    {{ form_row(form.type) }}
 
     <button type="submit" class="btn btn-primary">
       Search

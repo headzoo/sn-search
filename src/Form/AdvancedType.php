@@ -55,6 +55,14 @@ class AdvancedType extends AbstractType
                 'required' => false,
                 'choices'  => $domainChoices
             ])
+            ->add('type', ChoiceType::class, [
+                'required' => false,
+                'choices'  => [
+                    'Submissions and comments' => 'sc',
+                    'Submissions'              => 's',
+                    'Comments'                 => 'c'
+                ]
+            ])
         ;
 
         $builder->addEventListener(FormEvents::PRE_SUBMIT, function(FormEvent $event) {
@@ -78,6 +86,7 @@ class AdvancedType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => AdvancedModel::class,
+            'csrf_protection' => false,
             'flairs'     => [],
             'domains'    => []
         ]);

@@ -3,6 +3,9 @@ namespace App\Model;
 
 use DateTime;
 
+/**
+ * Class AdvancedModel
+ */
 class AdvancedModel
 {
     /**
@@ -14,6 +17,11 @@ class AdvancedModel
      * @var string
      */
     protected $title;
+
+    /**
+     * @var string
+     */
+    protected $type;
 
     /**
      * @var string
@@ -76,6 +84,26 @@ class AdvancedModel
     public function setTitle(?string $title): AdvancedModel
     {
         $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return AdvancedModel
+     */
+    public function setType(?string $type): AdvancedModel
+    {
+        $this->type = $type;
 
         return $this;
     }
