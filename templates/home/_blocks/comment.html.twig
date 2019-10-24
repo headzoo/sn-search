@@ -6,7 +6,7 @@
     </a>
     &nbsp;&middot;&nbsp;
     <span class="search-result-meta-date">
-      {{ result.created|date('M jS, Y') }}
+      {{ result.created|time_diff }}
     </span>
     &nbsp;&middot;&nbsp;
     <a href="https://reddit.com{{ result.permalink }}?context=1" target="_blank">

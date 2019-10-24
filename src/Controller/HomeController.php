@@ -53,7 +53,7 @@ class HomeController extends Controller
         $from  = ($page - 1) * 20;
         $resp  = $search->search($query, [
             'from' => $from,
-            'size' => 20 + $from
+            'size' => 20
         ]);
 
         $total = $resp->getTotalHits();

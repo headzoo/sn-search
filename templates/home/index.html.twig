@@ -1,10 +1,10 @@
 {% extends "base.html.twig" %}
 {% block body %}
-  <div class="row">
+  <div class="row header">
     <div class="col">
       <div class="header-brand">
         <a href="/">
-          <img src="{{ asset('images/logo.jpg') }}" alt="Logo" />
+          <img src="{{ asset('images/logo-circle.png') }}" alt="Logo" />
         </a>
         <h1>
           <a href="https://reddit.com/r/ScientificNutrition" target="_blank">
@@ -64,7 +64,7 @@
       {% else %}
         <ul class="search-results">
           {% for result in results %}
-            {% if result.parent_id is defined %}
+            {% if result.parent is defined %}
               {% include "home/_blocks/comment.html.twig" %}
             {% else %}
               {% include "home/_blocks/submission.html.twig" %}

@@ -11,7 +11,7 @@ body {
   color: #101010;
   display: flex;
   flex-direction: column;
-  background-color: $color-primary;
+  background-color: #1d698c;
 }
 
 a {
@@ -24,8 +24,19 @@ a {
 
 #page-container {
   flex: 1 0 auto;
+  margin-top: $gutter-size;
+  margin-bottom: $gutter-size;
   background-color: #FFF;
   box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.25);
+}
+
+.header {
+  background-color: #7c8c96;
+  padding-top: $gutter-size;
+
+  a {
+    color: #FFF;
+  }
 }
 
 .header-brand {
@@ -34,6 +45,7 @@ a {
 
   img {
     height: 100px;
+    margin-bottom: $gutter-size-sm;
   }
 
   h1 {

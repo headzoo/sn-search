@@ -35,7 +35,7 @@ const processSubmission = async (submission) => {
     body:  {
       author:      submission.author.name,
       title:       submission.title,
-      created:     submission.created,
+      created:     submission.created_utc,
       thumbnail:   submission.thumbnail,
       permalink:   submission.permalink,
       url:         submission.url,
@@ -88,7 +88,7 @@ const processComment = async (comment) => {
       permalink:  comment.permalink,
       text:       comment.body,
       parent:     comment.parent_id,
-      created:    comment.created,
+      created:    comment.created_utc,
       submission: submissionID
     }
   });

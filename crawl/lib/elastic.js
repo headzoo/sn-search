@@ -48,13 +48,13 @@ exports.createElasticClient = () => {
       }
     };
 
-    /*        await elastic.indices.putMapping({
+/*            await elastic.indices.putMapping({
               index: 'sn_submissions',
               type:  'submission',
               body:  submissionMappings
-            });*/
+            });
 
-    /*        await elastic.indices.putMapping({
+            await elastic.indices.putMapping({
               index: 'sn_comments',
               type:  'comment',
               body:  commentMappings
