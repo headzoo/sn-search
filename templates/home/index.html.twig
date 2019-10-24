@@ -82,7 +82,11 @@
               <ul class="pagination justify-content-center">
                 {% if page != 1 %}
                   <li class="page-item">
-                    <a class="page-link" href="{{ path('home', { 'page': 1 }) }}{{ query|raw }}">First</a>
+                    <a class="page-link" href="{{ path('home', { 'page': (page - 1) }) }}{{ query|raw }}">Prev</a>
+                  </li>
+                {% else %}
+                  <li class="page-item disabled">
+                    <span class="page-link">Prev</span>
                   </li>
                 {% endif %}
                 {% for i in 1..pages %}
@@ -100,7 +104,11 @@
                 {% endfor %}
                 {% if page != pages %}
                   <li class="page-item">
-                    <a class="page-link" href="{{ path('home', { 'page': pages }) }}{{ query|raw }}">Last</a>
+                    <a class="page-link" href="{{ path('home', { 'page': (page + 1) }) }}{{ query|raw }}">Next</a>
+                  </li>
+                {% else %}
+                  <li class="page-item disabled">
+                    <span class="page-link">Next</span>
                   </li>
                 {% endif %}
               </ul>
@@ -110,6 +118,4 @@
       {% endif %}
     </div>
   </div>
-
-
 {% endblock %}

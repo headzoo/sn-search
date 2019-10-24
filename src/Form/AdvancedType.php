@@ -24,7 +24,7 @@ class AdvancedType extends AbstractType
             'Select...' => ''
         ];
         foreach($options['flairs'] as $flair) {
-            $flairChoices[$flair] = str_replace(' ', '_', $flair);
+            $flairChoices[$flair] = $flair;
         }
 
         $domainChoices = [
@@ -65,13 +65,15 @@ class AdvancedType extends AbstractType
             ])
         ;
 
-        $builder->addEventListener(FormEvents::PRE_SUBMIT, function(FormEvent $event) {
+/*        $builder->addEventListener(FormEvents::PRE_SUBMIT, function(FormEvent $event) {
             $form = $event->getForm();
+            $data = $event->getData();
+            dump($data);die();
             $form->remove('flair');
             $form->remove('domain');
             $form->add('flair');
             $form->add('domain');
-        });
+        });*/
     }
 
     /**
