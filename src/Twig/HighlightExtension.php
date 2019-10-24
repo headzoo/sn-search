@@ -15,7 +15,8 @@ class HighlightExtension extends AbstractExtension
     public function getFilters()
     {
         return [
-            new TwigFilter('highlight', [$this, 'highlight'], ['is_safe' => ['html']])
+            new TwigFilter('highlight', [$this, 'highlight'], ['is_safe' => ['html']]),
+            new TwigFilter('highlightTitle', [$this, 'highlightTitle'], ['is_safe' => ['html']])
         ];
     }
 
@@ -28,7 +29,7 @@ class HighlightExtension extends AbstractExtension
      *
      * @return string|string[]|null
      */
-    public function highlight($str, $term, $words = 5, $maxWords = 50, $tag = 'b')
+    public function highlight($str, $term, $words = 5, $maxWords = 100, $tag = 'b')
     {
         if (stripos($str, $term) === false) {
             $parts    = explode(' ', $str);
@@ -70,5 +71,22 @@ class HighlightExtension extends AbstractExtension
         }
 
         return preg_replace("/\.{3,}/i", "...", $result);
+    }
+
+    /**
+     * @param string $str
+     * @param string $words
+     *
+     * @return string|string[]|null
+     */
+    public function highlightTitle($str, $words)
+    {
+        preg_match_all('~\w+~', $words, $m);
+        if(!$m) {
+            return $str;
+        }
+        $re = '~\\b(' . implode('|', $m[0]) . ')\\b~i';
+
+        return preg_replace($re, '<span class="highlight">\\0</span>', $str);
     }
 }

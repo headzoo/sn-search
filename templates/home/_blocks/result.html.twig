@@ -1,7 +1,7 @@
 <li class="search-result">
   <h4 class="search-result-tile">
     <a href="https://reddit.com{{ result.permalink }}" target="_blank">
-      {{ result.title }}
+      {{ result.title|highlightTitle(term) }}
     </a>
   </h4>
   <small class="search-result-meta">
@@ -15,7 +15,7 @@
     </span>
     &nbsp;&middot;&nbsp;
     <span class="search-result-meta-comments">
-      {{ result.numComments|number_format }} {% if result.numComments == 1 %}comment{% else %}comments{% endif %}
+      {{ result.numComments|default(0)|number_format }} {% if result.numComments|default(0) == 1 %}comment{% else %}comments{% endif %}
     </span>
     {% if result.domain %}
       &nbsp;&middot;&nbsp;

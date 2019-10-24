@@ -83,7 +83,8 @@ class HomeController extends Controller
      */
     protected function requestToQuery(Request $request, AdvancedModel $model)
     {
-        if (!$request->getQueryString()) {
+        $all = $request->query->all();
+        if (!$request->getQueryString() || (count($all) === 1 && isset($all['page']))) {
             return [
                 'sort' => [
                     'created' => 'desc'
