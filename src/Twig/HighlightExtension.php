@@ -25,11 +25,10 @@ class HighlightExtension extends AbstractExtension
      * @param string $term
      * @param int    $words
      * @param int    $maxWords
-     * @param string $tag
      *
      * @return string|string[]|null
      */
-    public function highlight($str, $term, $words = 5, $maxWords = 100, $tag = 'b')
+    public function highlight($str, $term, $words = 5, $maxWords = 100)
     {
         if (stripos($str, $term) === false) {
             $parts    = explode(' ', $str);
@@ -70,7 +69,15 @@ class HighlightExtension extends AbstractExtension
             }
         }
 
-        return preg_replace("/\.{3,}/i", "...", $result);
+        $str = preg_replace("/\.{3,}/i", "...", $result);
+        $parts    = explode(' ', $str);
+        $parts    = array_slice($parts, 0, $maxWords);
+        $sentence = join(' ', $parts);
+        if (strlen($str) > strlen($sentence)) {
+            $sentence .= '...';
+        }
+
+        return $sentence;
     }
 
     /**

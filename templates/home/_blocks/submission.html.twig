@@ -33,13 +33,20 @@
       </a>
     {% endif %}
   </small>
+
+  {% set t = terms[0]|default %}
   <div class="search-result-text">
     {% if not result.text and result.url %}
       <a href="{{ result.url }}" target="_blank">
         {{ result.url }}
       </a>
     {% else %}
-      {{ result.text|highlight(terms[0]|default) }}
+      {{ result.text|highlight(t) }}
     {% endif %}
   </div>
+{#  {% if result.crawled|default %}
+    <blockquote class="search-result-crawled">
+      {{ result.crawled|highlight(t) }}
+    </blockquote>
+  {% endif %}#}
 </li>

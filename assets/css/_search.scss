@@ -1,10 +1,10 @@
 @import "vars";
 
 .search-form {
-  margin-bottom: $gutter-size;
+  margin-bottom: $gutter-size-sm;
 
   .form-group {
-    margin-bottom: $gutter-size-sm;
+    margin-bottom: $gutter-size;
   }
 }
 
@@ -32,8 +32,9 @@
 }
 
 .search-result-tile {
-  font-size: 1.2rem;
-  margin-bottom: 0;
+  font-size: 1.4rem;
+  line-height: 1.8rem;
+  margin-bottom: 0.25rem;
 
   a {
     color: #000;
@@ -61,6 +62,10 @@
     margin-bottom: 0;
   }
 
+  h1 {
+    font-size: 1.2rem;
+  }
+
   .highlight {
     font-weight: bold;
     background-color: yellow;
@@ -75,4 +80,16 @@
 
 .search-result-meta-flair {
   padding: 4px $gutter-size-sm;
+}
+
+.search-result-crawled {
+  margin-top: $gutter-size;
+  margin-left: $gutter-size-lg;
+  padding-left: 15px;
+  border-left: 4px solid #000;
+
+  .highlight {
+    font-weight: bold;
+    background-color: yellow;
+  }
 }

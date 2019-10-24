@@ -35,22 +35,19 @@ class HomeController extends Controller
 
         if ($type = $model->getType()) {
             switch($type) {
-                case 's':
+                case 'sc':
                     $search = $this->indexManager->getIndex('sn_submissions')->createSearch();
+                    $search->addIndex('sn_comments');
                     break;
                 case 'c':
                     $search = $this->indexManager->getIndex('sn_comments')->createSearch();
                     break;
                 default:
                     $search = $this->indexManager->getIndex('sn_submissions')->createSearch();
-                    $search->addIndex('sn_comments');
                     break;
             }
         } else {
             $search = $this->indexManager->getIndex('sn_submissions')->createSearch();
-            if ($queryString) {
-                $search->addIndex('sn_comments');
-            }
         }
 
         $from  = ($page - 1) * 20;
@@ -65,6 +62,9 @@ class HomeController extends Controller
             $source = $result->getHit()['_source'];
             if (!empty($source['text'])) {
                 $source['text'] = $parser->parse($source['text']);
+            }
+            if (!empty($source['crawled'])) {
+                $source['crawled'] = nl2br($source['crawled']);
             }
             $results[] = $source;
         }
