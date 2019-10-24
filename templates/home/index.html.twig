@@ -1,0 +1,107 @@
+{% extends "base.html.twig" %}
+{% block body %}
+  <div class="row">
+    <div class="col">
+      <div class="header-brand">
+        <a href="/">
+          <img src="{{ asset('images/logo.jpg') }}" alt="Logo" />
+        </a>
+        <h1>
+          <a href="https://reddit.com/r/ScientificNutrition" target="_blank">
+            /r/ScientificNutrition
+          </a>
+        </h1>
+      </div>
+      <div class="search-form">
+        <form method="get">
+          <div class="form-group d-flex">
+            <label for="term-input" class="sr-only">
+              Search
+            </label>
+            <input
+              id="term-input"
+              name="term"
+              class="form-control"
+              value="{{ term }}"
+              placeholder="Search terms..."
+            />
+            <button type="submit" class="btn btn-primary">
+              Search
+            </button>
+          </div>
+        </form>
+        <small class="search-form-meta">
+          <a href="{{ path('advanced') }}">
+            Advanced Search
+          </a>
+          {% if query %}
+            &nbsp;[<a href="{{ path('advanced') }}?a=1{{ query }}">Edit</a>]
+          {% endif %}
+          {% if term %}
+            &nbsp;&nbsp;
+            <a href="https://www.ncbi.nlm.nih.gov/pubmed/?term={{ term|url_encode }}">
+              PubMed search
+            </a>
+            <div class="search-results-count text-right">
+              {{ total|number_format }} results found
+            </div>
+          {% endif %}
+        </small>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      {% if term and results|length == 0 %}
+        <p class="text-center">
+          No results match your search terms.
+        </p>
+      {% else %}
+        <ul class="search-results">
+          {% for result in results %}
+            {% include "home/_blocks/result.html.twig" %}
+          {% endfor %}
+        </ul>
+
+        {% spaceless %}
+          {% if pages > 1 %}
+
+            {# Number of page around current page+1 #}
+            {% set nearbyPagesLimit = 4 %}
+
+            <div>
+              <ul class="pagination justify-content-center">
+                {% if page != 1 %}
+                  <li class="page-item">
+                    <a class="page-link" href="{{ path('home', { 'page': 1 }) }}{{ query|raw }}">First</a>
+                  </li>
+                {% endif %}
+                {% for i in 1..pages %}
+                  {% if 0 == (page - nearbyPagesLimit) - loop.index %} {# dot before #}
+                    <li class="page-item disabled">&nbsp;...&nbsp;</li>
+                  {% elseif 0 == (page + nearbyPagesLimit) - loop.index %} {# dot after #}
+                    <li class="page-item disabled">&nbsp;...&nbsp;</li>
+                  {% elseif 0 < (page - nearbyPagesLimit) - loop.index %} {# hide all before #}
+                  {% elseif 0 > (page + nearbyPagesLimit) - loop.index %} {# hide all after #}
+                  {% else %}
+                    <li {% if page == loop.index  %} class="page-item active"{% endif %}>
+                      <a class="page-link" href="{{ path('home', { 'page': loop.index }) }}{{ query|raw }}">{{ loop.index }}</a>
+                    </li>
+                  {% endif %}
+                {% endfor %}
+                {% if page != pages %}
+                  <li class="page-item">
+                    <a class="page-link" href="{{ path('home', { 'page': pages }) }}{{ query|raw }}">Last</a>
+                  </li>
+                {% endif %}
+              </ul>
+            </div>
+          {% endif %}
+        {% endspaceless %}
+      {% endif %}
+    </div>
+  </div>
+
+
+{% endblock %}

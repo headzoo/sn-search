@@ -1,0 +1,10 @@
+fos_elastica:
+    clients:
+        default: { url: '%env(ELASTICSEARCH_URL)%' }
+    indexes:
+        sn_submissions:
+            types:
+                submission:
+                    properties:
+                        title: { boost: 10 }
+                        author: ~

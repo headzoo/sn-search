@@ -1,0 +1,45 @@
+<li class="search-result">
+  <h4 class="search-result-tile">
+    <a href="https://reddit.com{{ result.permalink }}" target="_blank">
+      {{ result.title }}
+    </a>
+  </h4>
+  <small class="search-result-meta">
+    Posted by&nbsp;
+    <a href="{{ path('home') }}?author={{ result.author|url_encode }}" class="search-result-meta-author">
+      /u/{{ result.author }}
+    </a>
+    &nbsp;&middot;&nbsp;
+    <span class="search-result-meta-date">
+      {{ result.created|date('M jS, Y') }}
+    </span>
+    &nbsp;&middot;&nbsp;
+    <span class="search-result-meta-comments">
+      {{ result.numComments|number_format }} {% if result.numComments == 1 %}comment{% else %}comments{% endif %}
+    </span>
+    {% if result.domain %}
+      &nbsp;&middot;&nbsp;
+      <a href="{{ path('home') }}?domain={{ result.domain|url_encode }}">
+        {{ result.domain }}
+      </a>
+    {% endif %}
+    {% if result.flair %}
+      &nbsp;&middot;&nbsp;
+      <a
+        href="{{ path('home') }}?flair={{ result.flair|url_encode }}"
+        class="badge badge-primary search-result-meta-flair"
+      >
+        {{ result.flair }}
+      </a>
+    {% endif %}
+  </small>
+  <div class="search-result-text">
+    {% if not result.text and result.url %}
+      <a href="{{ result.url }}" target="_blank">
+        {{ result.url }}
+      </a>
+    {% else %}
+      {{ result.text|highlight(terms[0]|default) }}
+    {% endif %}
+  </div>
+</li>

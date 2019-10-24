@@ -1,0 +1,29 @@
+security:
+    encoders:
+        App\Entity\User:
+            algorithm: bcrypt
+    providers:
+        user:
+            entity:
+                class: App\Entity\User
+                property: email
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            anonymous: true
+            provider: user
+            user_checker: App\Security\UserChecker
+            form_login:
+                login_path: login
+                check_path: login_check
+                default_target_path: home
+                username_parameter: _email
+                password_parameter: _password
+            logout:
+                path:   /logout
+                target: /
+    access_control:
+        - { path: ^/,      roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin, roles: ROLE_ADMIN }

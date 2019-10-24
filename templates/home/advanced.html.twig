@@ -1,0 +1,34 @@
+{% extends "base.html.twig" %}
+{% block body %}
+<div class="row">
+  <div class="col">
+    <div class="header-brand">
+      <a href="/">
+        <img src="{{ asset('images/logo.jpg') }}" alt="Logo" />
+      </a>
+      <h1>
+        <a href="https://reddit.com/r/ScientificNutrition" target="_blank">
+          /r/ScientificNutrition
+        </a>
+      </h1>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col col-xl-6 offset-xl-3">
+    {{ form_start(form) }}
+    {{ form_row(form.term) }}
+    {{ form_row(form.author) }}
+    {{ form_row(form.flair) }}
+    {{ form_row(form.domain) }}
+    {{ form_row(form.startDate) }}
+    {{ form_row(form.endDate) }}
+
+    <button type="submit" class="btn btn-primary">
+      Search
+    </button>
+    {{ form_end(form) }}
+  </div>
+</div>
+{% endblock %}
