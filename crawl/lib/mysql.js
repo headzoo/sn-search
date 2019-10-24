@@ -27,6 +27,41 @@ const findByURL = (url) => {
 };
 
 /**
+ * @returns {Promise}
+ */
+const findUncrawled = () => {
+  return new Promise((resolve, reject) => {
+    connection.query('SELECT * FROM `crawl` WHERE `is_crawled` = 0', [], (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+};
+
+/**
+ * @param {number} submissionId
+ * @returns {Promise}
+ */
+const markCrawled = (submissionId) => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      'UPDATE `crawl` SET `is_crawled` = 1 WHERE `id` = ? LIMIT 1',
+      [submissionId],
+      (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      }
+    )
+  });
+};
+
+/**
  * @param {string} submissionId
  * @param {string} url
  * @returns {Promise}
@@ -48,7 +83,9 @@ const insertURL = (submissionId, url) => {
 };
 
 module.exports = {
-    connection,
-    findByURL,
-    insertURL
+  connection,
+  findByURL,
+  insertURL,
+  markCrawled,
+  findUncrawled
 };

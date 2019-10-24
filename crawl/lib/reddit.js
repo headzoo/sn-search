@@ -52,6 +52,10 @@ const processSubmission = async (submission) => {
   }
 };
 
+const fetchSubmission = async (id) => {
+  return await elastic.get({ id, index: 'sn_submissions', type: 'submission' })
+};
+
 /**
  * @param {*} comment
  * @returns {Promise<void>}
@@ -79,5 +83,6 @@ const processComment = async (comment) => {
 module.exports = {
   initialize,
   processComment,
-  processSubmission
+  processSubmission,
+  fetchSubmission
 };
