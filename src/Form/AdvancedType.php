@@ -5,6 +5,7 @@ use App\Model\AdvancedModel;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -20,9 +21,7 @@ class AdvancedType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $flairChoices = [
-            'Select...' => ''
-        ];
+        $flairChoices = [];
         foreach($options['flairs'] as $flair) {
             $flairChoices[$flair] = $flair;
         }
@@ -47,8 +46,11 @@ class AdvancedType extends AbstractType
                 'widget'     => 'single_text',
                 'empty_data' => ''
             ])
-            ->add('flair', ChoiceType::class, [
+            ->add('flair', HiddenType::class)
+            ->add('flairs', ChoiceType::class, [
                 'required' => false,
+                'multiple' => true,
+                'expanded' => true,
                 'choices'  => $flairChoices
             ])
             ->add('domain', ChoiceType::class, [

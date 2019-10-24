@@ -83,6 +83,24 @@ class HomeController extends Controller
     }
 
     /**
+     * @Route("/advanced", name="advanced")
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function advancedAction(Request $request)
+    {
+        $model = new AdvancedModel();
+        $form  = $this->createAdvancedForm($model);
+        $form->submit($request->query->all());
+
+        return $this->render('home/advanced.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
      * @param Request       $request
      * @param AdvancedModel $model
      *
@@ -106,7 +124,17 @@ class HomeController extends Controller
         $queryString = '';
         $filters     = [];
         if ($term = $model->getTerm()) {
-            $queryString = $term;
+            $cleaned = [];
+            $parts = explode(' ', $term);
+            foreach($parts as $part) {
+                if (stripos($part, '/u/') === 0) {
+                    $model->setAuthor(str_replace('/u/', '', $part));
+                } else {
+                    $cleaned[] = $part;
+                }
+            }
+
+            $queryString = join(' ', $cleaned);
         }
 
         $query = [
@@ -127,6 +155,9 @@ class HomeController extends Controller
         if ($author = $model->getAuthor()) {
             $filters['author'] = str_replace('/u/', '', $author);
         }
+        if ($flairs = $model->getFlairs()) {
+            $filters['flair'] = $flairs;
+        }
         if ($flair = $model->getFlair()) {
             $filters['flair'] = $flair;
         }
@@ -141,11 +172,19 @@ class HomeController extends Controller
                 ]
             ];
             foreach ($filters as $key => $value) {
-                $query['query']['bool']['filter']['bool']['must'][] = [
-                    'term' => [
-                        $key => $value
-                    ]
-                ];
+                if (is_array($value)) {
+                    $query['query']['bool']['filter']['bool']['must'][] = [
+                        'terms' => [
+                            $key => $value
+                        ]
+                    ];
+                } else {
+                    $query['query']['bool']['filter']['bool']['must'][] = [
+                        'term' => [
+                            $key => $value
+                        ]
+                    ];
+                }
             }
         }
 
@@ -181,24 +220,6 @@ class HomeController extends Controller
         }
 
         return $query;
-    }
-
-    /**
-     * @Route("/advanced", name="advanced")
-     *
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function advancedAction(Request $request)
-    {
-        $model = new AdvancedModel();
-        $form  = $this->createAdvancedForm($model);
-        $form->submit($request->query->all());
-
-        return $this->render('home/advanced.html.twig', [
-            'form' => $form->createView()
-        ]);
     }
 
     /**

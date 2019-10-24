@@ -29,6 +29,11 @@ class AdvancedModel
     protected $author;
 
     /**
+     * @var array
+     */
+    protected $flairs;
+
+    /**
      * @var string
      */
     protected $flair;
@@ -124,6 +129,26 @@ class AdvancedModel
     public function setAuthor(?string $author): AdvancedModel
     {
         $this->author = $author;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFlairs(): ?array
+    {
+        return $this->flairs;
+    }
+
+    /**
+     * @param array $flairs
+     *
+     * @return AdvancedModel
+     */
+    public function setFlairs(?array $flairs): AdvancedModel
+    {
+        $this->flairs = $flairs;
 
         return $this;
     }
