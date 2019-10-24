@@ -8,6 +8,10 @@
     <span class="search-result-meta-date">
       {{ result.created|date('M jS, Y') }}
     </span>
+    &nbsp;&middot;&nbsp;
+    <a href="https://reddit.com{{ result.permalink }}?context=1" target="_blank">
+      link
+    </a>
   </small>
   <div class="search-result-text">
     {{ result.text|highlight(terms[0]|default) }}
