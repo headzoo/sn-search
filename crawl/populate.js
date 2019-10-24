@@ -11,14 +11,33 @@ const reddit = require('./lib/reddit');
 
   await reddit.initialize();
 
-/*  const postListings = await snoowrap.getSubreddit('ScientificNutrition')
-    .getNew();
-  const posts = await postListings.fetchAll();
-  posts.forEach(async (s) => {
-      await reddit.processSubmission(s);
-      await sleep(500);
-  });*/
+  /**
+   * @param {*} submissions
+   * @returns {Promise}
+   */
+  const processSubmissions = async (submissions) => {
+    if (submissions.length === 0) {
+      console.log('empty');
+      return;
+    }
 
+    submissions.forEach(async (s) => {
+      await reddit.processSubmission(s);
+    });
+    await sleep(5000);
+
+    return submissions.fetchMore({ amount: 1000, append: false })
+      .then(processSubmissions);
+  };
+
+  await snoowrap.getSubreddit('ScientificNutrition')
+    .getNew({ limit: 1000 })
+    .then(processSubmissions);
+
+  /**
+   * @param {Listing} comments
+   * @returns {Promise}
+   */
   const processComments = async (comments) => {
     if (comments.length === 0) {
       console.log('empty');
@@ -30,24 +49,11 @@ const reddit = require('./lib/reddit');
     });
     await sleep(2000);
 
-    return comments.fetchMore({ amount: 100 })
+    return comments.fetchMore({ amount: 100, append: false })
       .then(processComments);
   };
 
   await snoowrap.getSubreddit('ScientificNutrition')
     .getNewComments({ limit: 100 })
     .then(processComments);
-
-/*  const commentPromises = [];
-  const commentListings = await snoowrap.getSubreddit('ScientificNutrition')
-    .getNewComments();
-  const comments = await commentListings.fetchAll();
-  comments.forEach((c) => {
-    commentPromises.push(reddit.processComment(c));
-  });
-
-  Promise.all(commentPromises)
-    .then(() => {
-      console.log('done!');
-    });*/
 })();

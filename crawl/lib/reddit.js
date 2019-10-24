@@ -52,6 +52,10 @@ const processSubmission = async (submission) => {
   }
 };
 
+/**
+ * @param {string} id
+ * @returns {Promise}
+ */
 const fetchSubmission = async (id) => {
   return await elastic.get({ id, index: 'sn_submissions', type: 'submission' })
 };
@@ -65,7 +69,7 @@ const processComment = async (comment) => {
     return;
   }
 
-  console.log(`${comment.author.name}`);
+  console.log(`${comment.id}: ${comment.author.name}`);
   elastic.index({
     index: 'sn_comments',
     id:    comment.id,

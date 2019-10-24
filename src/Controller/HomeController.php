@@ -167,7 +167,13 @@ class HomeController extends Controller
             unset($query['query']['bool']);
         }
 
-        if (empty($query['query']) || (!empty($all['author']) && empty($all['term']))) {
+        if ((!empty($all['author']) && empty($all['term']))) {
+            $query['sort'] = [
+                'created' => 'desc'
+            ];
+        }
+
+        if (empty($query['query'])) {
             unset($query['query']);
             $query['sort'] = [
                 'created' => 'desc'

@@ -59,7 +59,7 @@ exports.createElasticClient = () => {
               body:  commentMappings
             });*/
 
-    /*        await elastic.indices.delete({
+/*            await elastic.indices.delete({
                 index: 'sn_submissions'
             }).catch((err) => {
                 reject(err.meta.body);
