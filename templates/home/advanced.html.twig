@@ -1,10 +1,10 @@
 {% extends "base.html.twig" %}
 {% block body %}
-<div class="row">
+<div class="row header">
   <div class="col">
     <div class="header-brand">
       <a href="/">
-        <img src="{{ asset('images/logo.jpg') }}" alt="Logo" />
+        <img src="{{ asset('images/logo-circle.png') }}" alt="Logo" />
       </a>
       <h1>
         <a href="https://reddit.com/r/ScientificNutrition" target="_blank">
@@ -15,7 +15,7 @@
   </div>
 </div>
 
-<div class="row" style="margin-bottom: 15px;">
+<div class="row gutter-bottom gutter-top">
   <div class="col col-xl-6 offset-xl-3">
     {{ form_start(form) }}
     {{ form_row(form.term) }}

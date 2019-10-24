@@ -1,0 +1,89 @@
+@import "vars";
+
+.gutter {
+  padding: $gutter-size;
+}
+
+.gutter-sm {
+  padding: $gutter-size / 2;
+}
+
+.gutter-bottom {
+  padding-bottom: $gutter-size;
+}
+
+.gutter-mg-bottom {
+  margin-bottom: $gutter-size;
+}
+
+.gutter-mg-bottom-sm {
+  margin-bottom: $gutter-size-sm;
+}
+
+.gutter-top {
+  padding-top: $gutter-size;
+}
+
+.gutter-top-lg {
+  padding-top: $gutter-size-lg;
+}
+
+.gutter-bottom-sm {
+  padding-bottom: $gutter-size-sm;
+}
+
+.gutter-top-sm {
+  padding-top: $gutter-size-sm;
+}
+
+.gutter-mg-right {
+  margin-right: $gutter-size !important;
+}
+
+.gutter-mg-right-sm {
+  margin-right: $gutter-size-sm !important;
+}
+
+.gutter-mg-left-sm {
+  margin-left: $gutter-size-sm !important;
+}
+
+.no-gutter-mg-bottom {
+  margin-bottom: 0;
+}
+
+.circle {
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.nowrap {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.vertical-align-middle {
+  vertical-align: middle !important;
+}
+
+.cover {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+}
+
+.no-margin-bottom {
+  margin-bottom: 0 !important;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.hover-underline {
+  &:hover {
+    text-decoration: underline;
+  }
+}

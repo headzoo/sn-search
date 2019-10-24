@@ -8,7 +8,7 @@ const reddit = require('./lib/reddit');
 
   const opts = {
     subreddit: 'ScientificNutrition',
-    pollTime:  10000
+    pollTime:  20000
   };
 
   const submissions = new SubmissionStream(snoowrap, opts);

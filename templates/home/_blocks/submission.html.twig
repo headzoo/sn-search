@@ -23,6 +23,12 @@
         {{ result.domain }}
       </a>
     {% endif %}
+    {% if result.url and result.domain != 'self.ScientificNutrition' %}
+      &nbsp;&middot;&nbsp;
+      <a href="http://sci-hub.tw/{{ result.url }}" target="_blank">
+        sci-hub
+      </a>
+    {% endif %}
     {% if result.flair %}
       &nbsp;&middot;&nbsp;
       <a
