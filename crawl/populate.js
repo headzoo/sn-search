@@ -26,12 +26,12 @@ const reddit = require('./lib/reddit');
     });
     await sleep(5000);
 
-    return submissions.fetchMore({ amount: 1000, append: false })
+    return submissions.fetchMore({ amount: 100, append: false })
       .then(processSubmissions);
   };
 
   await snoowrap.getSubreddit('ScientificNutrition')
-    .getNew({ limit: 1000 })
+    .getNew({ limit: 100 })
     .then(processSubmissions);
 
   /**
@@ -47,7 +47,7 @@ const reddit = require('./lib/reddit');
     comments.forEach(async (c) => {
       await reddit.processComment(c);
     });
-    await sleep(2000);
+    await sleep(5000);
 
     return comments.fetchMore({ amount: 100, append: false })
       .then(processComments);

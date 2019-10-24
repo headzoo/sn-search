@@ -1,7 +1,14 @@
+const { snoowrap } = require('./snoowrap');
 const { createElasticClient } = require('./elastic');
 const mysql = require('./mysql');
 
 let elastic;
+
+const sleep = (ms) => {
+  return new Promise(resolve => {
+    setTimeout(resolve, ms);
+  });
+};
 
 /**
  * @returns {Promise<void>}
@@ -69,17 +76,34 @@ const processComment = async (comment) => {
     return;
   }
 
-  console.log(`${comment.id}: ${comment.author.name}`);
-  elastic.index({
+  const submissionID = comment.link_id.replace('t3_', '');
+
+  console.log(`${comment.id}:${submissionID} ${comment.author.name} https://www.reddit.com${comment.permalink}`);
+  await elastic.index({
     index: 'sn_comments',
     id:    comment.id,
     type:  'comment',
     body:  {
-      author:    comment.author.name,
-      permalink: comment.permalink,
-      text:      comment.body,
-      parent_id: comment.parent_id,
-      created:   comment.created
+      author:     comment.author.name,
+      permalink:  comment.permalink,
+      text:       comment.body,
+      parent:     comment.parent_id,
+      created:    comment.created,
+      submission: submissionID
+    }
+  });
+
+  await sleep(2000);
+  const submission  = await snoowrap.getSubmission(submissionID);
+  const numComments = await submission.num_comments;
+  await elastic.update({
+    index: 'sn_comments',
+    id:    comment.id,
+    type:  'comment',
+    body:  {
+      doc: {
+        numComments
+      }
     }
   });
 };

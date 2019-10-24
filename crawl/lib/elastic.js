@@ -38,11 +38,12 @@ exports.createElasticClient = () => {
     const commentMappings = {
       comment: {
         properties: {
-          author:    { type: 'keyword' },
-          parent_id: { type: 'keyword', index: false },
-          text:      { type: 'text' },
-          permalink: { type: 'keyword' },
-          created:   { type: 'date', format: 'epoch_second' }
+          author:     { type: 'keyword' },
+          parent:     { type: 'keyword', index: false },
+          submission: { type: 'keyword', index: false },
+          text:       { type: 'text' },
+          permalink:  { type: 'keyword' },
+          created:    { type: 'date', format: 'epoch_second' }
         }
       }
     };
