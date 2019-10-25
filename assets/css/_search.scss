@@ -67,6 +67,10 @@
     font-size: 1.2rem;
   }
 
+  h2, h3, h4 {
+    font-size: 1rem;
+  }
+
   .highlight {
     font-weight: bold;
     background-color: yellow;
@@ -85,9 +89,9 @@
 
 .search-result-crawled {
   margin-top: $gutter-size;
-  margin-left: $gutter-size-lg;
+  margin-left: $gutter-size;
   padding-left: 15px;
-  border-left: 4px solid #000;
+  border-left: 4px solid $color-primary;
 
   .highlight {
     font-weight: bold;
