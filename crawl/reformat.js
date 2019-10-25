@@ -71,7 +71,7 @@ const { createElasticClient } = require('./lib/elastic');
         mappings: submissionMappings
       }
     }).catch((err) => {
-      reject(err.meta.body);
+      console.error(err.meta.body);
     });
   }
 
@@ -85,7 +85,7 @@ const { createElasticClient } = require('./lib/elastic');
         mappings: commentMappings
       }
     }).catch((err) => {
-      reject(err.meta.body);
+      console.error(err.meta.body);
     });
   }
 })();
