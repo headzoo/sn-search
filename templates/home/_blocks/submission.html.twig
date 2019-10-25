@@ -47,12 +47,10 @@
         {{ result.url }}
       </a>
     {% else %}
-    <blockquote class="search-result-crawled">
-      {{ result.text|highlight(t) }}
-    </blockquote>
+    {{ result.text|highlight(t) }}
     {% endif %}
     {% if result.crawled|default %}
-      <blockquote class="search-result-crawled">
+      <blockquote class="search-result-quote">
         {{ result.crawled|highlight(t) }}
       </blockquote>
     {% endif %}
