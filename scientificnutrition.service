@@ -1,0 +1,14 @@
+[Unit]
+Description=ScientificNutrition
+
+[Service]
+ExecStart=/var/www/sn.headzoo.io/crawl/app.js
+Restart=always
+User=www-data
+Group=www-data
+Environment=PATH=/usr/bin:/usr/local/bin
+Environment=NODE_ENV=production
+WorkingDirectory=/var/www/sn.headzoo.io/crawl
+
+[Install]
+WantedBy=multi-user.target
