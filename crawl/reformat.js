@@ -52,13 +52,13 @@ const { createElasticClient } = require('./lib/elastic');
   await elastic.indices.delete({
     index: 'sn_submissions'
   }).catch((err) => {
-    reject(err.meta.body);
+    console.error(err.meta.body);
   });
 
   await elastic.indices.delete({
     index: 'sn_comments'
   }).catch((err) => {
-    reject(err.meta.body);
+    console.error(err.meta.body);
   });
 
   let resp = await elastic.indices.exists({
