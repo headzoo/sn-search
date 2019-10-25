@@ -11,7 +11,7 @@ const { createElasticClient } = require('./lib/elastic');
     submission: {
       properties: {
         author:      { type: 'keyword' },
-        title:       { type: 'text' },
+        title:       { type: 'text', boost: 2 },
         created:     { type: 'date', format: 'epoch_second' },
         permalink:   { type: 'keyword' },
         thumbnail:   { type: 'keyword' },
@@ -38,7 +38,7 @@ const { createElasticClient } = require('./lib/elastic');
     }
   };
 
-  await elastic.indices.delete({
+/*  await elastic.indices.delete({
     index: 'sn_submissions'
   }).catch((err) => {
     console.error(err.meta.body);
@@ -48,7 +48,7 @@ const { createElasticClient } = require('./lib/elastic');
     index: 'sn_comments'
   }).catch((err) => {
     console.error(err.meta.body);
-  });
+  });*/
 
   let resp = await elastic.indices.exists({
     index: 'sn_submissions'
