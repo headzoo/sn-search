@@ -292,7 +292,7 @@ const { createElasticClient } = require('./lib/elastic');
         }
 
         if (text) {
-          const submission = await reddit.fetchSubmission(submission_id);
+          const submission = await reddit.getSubmission(submission_id);
           if (submission.body.found) {
             await elastic.update({
               index: 'sn_submissions',
