@@ -38,18 +38,6 @@ const { createElasticClient } = require('./lib/elastic');
     }
   };
 
-/*  await elastic.indices.putMapping({
-    index: 'sn_submissions',
-    type:  'submission',
-    body:  submissionMappings
-  });
-
-  await elastic.indices.putMapping({
-    index: 'sn_comments',
-    type:  'comment',
-    body:  commentMappings
-  });*/
-
   await elastic.indices.delete({
     index: 'sn_submissions'
   }).catch((err) => {
@@ -74,6 +62,14 @@ const { createElasticClient } = require('./lib/elastic');
     }).catch((err) => {
       console.error(err.meta.body);
     });
+  } else {
+    await elastic.indices.putMapping({
+      index: 'sn_submissions',
+      type:  'submission',
+      body:  submissionMappings
+    }).catch((err) => {
+      console.error(err.meta.body);
+    });
   }
 
   resp = await elastic.indices.exists({
@@ -85,6 +81,14 @@ const { createElasticClient } = require('./lib/elastic');
       body:  {
         mappings: commentMappings
       }
+    }).catch((err) => {
+      console.error(err.meta.body);
+    });
+  } else {
+    await elastic.indices.putMapping({
+      index: 'sn_comments',
+      type:  'comment',
+      body:  commentMappings
     }).catch((err) => {
       console.error(err.meta.body);
     });
