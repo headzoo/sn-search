@@ -75,7 +75,9 @@ const processSubmission = async (submission) => {
 
     const found = await getSubmission(submission.id)
       .catch((err) => {
-        console.error(err);
+        if (err.meta.statusCode !== 404) {
+          console.error(err);
+        }
       });
     if (found) {
       await elastic.update({
