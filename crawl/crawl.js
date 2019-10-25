@@ -13,6 +13,7 @@ const { createElasticClient } = require('./lib/elastic');
     'https://www.ncbi.nlm.nih.gov/pubmed':               '.abstr div',
     'https://www.ncbi.nlm.nih.gov/m/pubmed':             '.no_t_m',
     'https://www.ncbi.nlm.nih.gov/pmc/article':          '.article p',
+    'https://www.ncbi.nlm.nih.gov/pmc/articles':         '.tsec',
     'https://www.sciencedirect.com/science/article/pii': '.abstract div',
     'https://academic.oup.com':                          '.abstract',
     'https://jamanetwork.com/journals/jama':             '.article-full-text',
