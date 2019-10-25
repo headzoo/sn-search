@@ -180,7 +180,7 @@ const { createElasticClient } = require('./lib/elastic');
           }
         }
 
-        await mysql.markCrawled(row.id, html);
+        await mysql.markCrawled(row.id, html || '');
       } else{
         console.log(`error while fetching ${url}`);
       }
