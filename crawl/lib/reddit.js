@@ -72,33 +72,57 @@ const getSubmission = async (id) => {
 const processSubmission = async (submission) => {
   return new Promise(async (resolve, reject) => {
     console.log(`${submission.id}: /u/${submission.author} - ${submission.title}`);
-    await elastic.index({
-      index: 'sn_submissions',
-      id:    submission.id,
-      type:  'submission',
-      body:  {
-        author:      submission.author,
-        title:       submission.title,
-        created:     submission.created_utc,
-        thumbnail:   submission.thumbnail,
-        permalink:   submission.permalink,
-        url:         submission.url,
-        text:        submission.selftext,
-        flair:       submission.link_flair_text,
-        domain:      submission.domain,
-        numComments: submission.num_comments
-      }
-    });
 
-    if (submission.url) {
-      const rows = await mysql.findByURL(submission.url).catch((err) => {
-        reject(err);
+    const found = await getSubmission(submission.id);
+    if (found) {
+      await elastic.update({
+        index: 'sn_submissions',
+        id:    submission.id,
+        type:  'submission',
+        body:  {
+          doc: {
+            author:      submission.author,
+            title:       submission.title,
+            created:     submission.created_utc,
+            thumbnail:   submission.thumbnail,
+            permalink:   submission.permalink,
+            url:         submission.url,
+            text:        submission.selftext,
+            flair:       submission.link_flair_text,
+            domain:      submission.domain,
+            numComments: submission.num_comments
+          }
+        }
       });
-      if (rows.length === 0) {
-        console.log(`Queuing to crawl: ${submission.url}`);
-        await mysql.insertURL(submission.id, submission.url).catch((err) => {
+    } else {
+      await elastic.index({
+        index: 'sn_submissions',
+        id:    submission.id,
+        type:  'submission',
+        body:  {
+          author:      submission.author,
+          title:       submission.title,
+          created:     submission.created_utc,
+          thumbnail:   submission.thumbnail,
+          permalink:   submission.permalink,
+          url:         submission.url,
+          text:        submission.selftext,
+          flair:       submission.link_flair_text,
+          domain:      submission.domain,
+          numComments: submission.num_comments
+        }
+      });
+
+      if (submission.url) {
+        const rows = await mysql.findByURL(submission.url).catch((err) => {
           reject(err);
-        })
+        });
+        if (rows.length === 0) {
+          console.log(`Queuing to crawl: ${submission.url}`);
+          await mysql.insertURL(submission.id, submission.url).catch((err) => {
+            reject(err);
+          })
+        }
       }
     }
 
