@@ -105,7 +105,124 @@ const { createElasticClient } = require('./lib/elastic');
    * @returns {{ html: {string}, text: {string} }}
    */
   const processLancet = ($) => {
+    const $el = $('.hlFld-Fulltext');
+
+    return {
+      text: $el.text(),
+      html: $el.html()
+    };
+  };
+
+  /**
+   * @param {cheerio} $
+   * @returns {{ html: {string}, text: {string} }}
+   */
+  const processSagePub = ($) => {
     const $el = $('.article__sections');
+
+    return {
+      text: $el.text(),
+      html: $el.html()
+    };
+  };
+
+  /**
+   * @param {cheerio} $
+   * @returns {{ html: {string}, text: {string} }}
+   */
+  const processExamine = ($) => {
+    const $el = $('.article-module-content');
+
+    return {
+      text: $el.text(),
+      html: $el.html()
+    };
+  };
+
+  /**
+   * @param {cheerio} $
+   * @returns {{ html: {string}, text: {string} }}
+   */
+  const processNewEngland = ($) => {
+    const $el = $('.o-article-body__section');
+
+    return {
+      text: $el.text(),
+      html: $el.html()
+    };
+  };
+
+  /**
+   * @param {cheerio} $
+   * @returns {{ html: {string}, text: {string} }}
+   */
+  const processTand = ($) => {
+    const $el = $('.article');
+
+    return {
+      text: $el.text(),
+      html: $el.html()
+    };
+  };
+
+  /**
+   * @param {cheerio} $
+   * @returns {{ html: {string}, text: {string} }}
+   */
+  const processAha = ($) => {
+    const $el = $('.abstractSection');
+
+    return {
+      text: $el.text(),
+      html: $el.html()
+    };
+  };
+
+  /**
+   * @param {cheerio} $
+   * @returns {{ html: {string}, text: {string} }}
+   */
+  const processNature = ($) => {
+    const $el = $('.c-article-section');
+
+    return {
+      text: $el.text(),
+      html: $el.html()
+    };
+  };
+
+  /**
+   * @param {cheerio} $
+   * @returns {{ html: {string}, text: {string} }}
+   */
+  const processAnnals = ($) => {
+    const $el = $('.abstract');
+
+    return {
+      text: $el.text(),
+      html: $el.html()
+    };
+  };
+
+  /**
+   * @param {cheerio} $
+   * @returns {{ html: {string}, text: {string} }}
+   */
+  const processDiabetesJournals = ($) => {
+    const $el = $('.article');
+
+    return {
+      text: $el.text(),
+      html: $el.html()
+    };
+  };
+
+  /**
+   * @param {cheerio} $
+   * @returns {{ html: {string}, text: {string} }}
+   */
+  const processScienceDaily = ($) => {
+    const $el = $('#story_text');
 
     return {
       text: $el.text(),
@@ -118,11 +235,21 @@ const { createElasticClient } = require('./lib/elastic');
     'https://www.ncbi.nlm.nih.gov/m/pubmed':             processPubMedMobile,
     'https://www.ncbi.nlm.nih.gov/pmc/article':          processPubMedArticle,
     'https://www.sciencedirect.com/science/article/pii': processScienceDirect,
-    'https://academic.oup.com/ajcn':                     processOxford,
-    'https://academic.oup.com/jn/article':               processOxford,
+    'https://academic.oup.com':                          processOxford,
     'https://jamanetwork.com/journals/jama':             processJama,
     'https://www.thelancet.com/journals/lanpub/article': processLancet,
-    // 'https://www.bmj.com/content':                       processBMJ
+    'https://journals.sagepub.com/doi/full':             processSagePub,
+    // 'https://www.bmj.com/content':                       processBMJ,
+    'https://bjsm.bmj.com/content':                      processBMJ,
+    'https://heart.bmj.com/content/early':               processBMJ,
+    'https://examine.com':                               processExamine,
+    'https://www.nejm.org/doi/ful':                      processNewEngland,
+    'https://www.tandfonline.com/doi/full':              processTand,
+    'https://www.ahajournals.org/doi/full':              processAha,
+    'https://www.nature.com/articles':                   processNature,
+    'https://annals.org/aim/fullarticle':                processAnnals,
+    'https://care.diabetesjournals.org/content':         processDiabetesJournals,
+    'https://www.sciencedaily.com/releases':             processScienceDaily
   };
 
   /**
