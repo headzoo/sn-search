@@ -73,7 +73,10 @@ const processSubmission = async (submission) => {
   return new Promise(async (resolve, reject) => {
     console.log(`${submission.id}: /u/${submission.author} - ${submission.title}`);
 
-    const found = await getSubmission(submission.id);
+    const found = await getSubmission(submission.id)
+      .catch((err) => {
+        console.error(err);
+      });
     if (found) {
       await elastic.update({
         index: 'sn_submissions',
