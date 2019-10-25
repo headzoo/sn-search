@@ -11,66 +11,106 @@ const { createElasticClient } = require('./lib/elastic');
 
   /**
    * @param {cheerio} $
-   * @returns {string}
+   * @returns {{ html: {string}, text: {string} }}
    */
   const processPubMed = ($) => {
-    return $('.abstr div').text();
+    const $el = $('.abstr div');
+
+    return {
+      text: $el.text(),
+      html: $el.html()
+    };
   };
 
   /**
    * @param {cheerio} $
-   * @returns {string}
+   * @returns {{ html: {string}, text: {string} }}
    */
   const processPubMedMobile = ($) => {
-    return $('.no_t_m').text();
+    const $el = $('.no_t_m');
+
+    return {
+      text: $el.text(),
+      html: $el.html()
+    };
   };
 
   /**
    * @param {cheerio} $
-   * @returns {string}
+   * @returns {{ html: {string}, text: {string} }}
    */
   const processPubMedArticle = ($) => {
-    return $('.article p').text();
+    const $el = $('.article p');
+
+    return {
+      text: $el.text(),
+      html: $el.html()
+    };
   };
 
   /**
    * @param {cheerio} $
-   * @returns {string}
+   * @returns {{ html: {string}, text: {string} }}
    */
   const processScienceDirect = ($) => {
-    return $('.abstract div').text();
+    const $el = $('.abstract div');
+
+    return {
+      text: $el.text(),
+      html: $el.html()
+    };
   };
 
   /**
    * @param {cheerio} $
-   * @returns {string}
+   * @returns {{ html: {string}, text: {string} }}
    */
   const processOxford = ($) => {
-    return $('.abstract').text();
+    const $el = $('.abstract');
+
+    return {
+      text: $el.text(),
+      html: $el.html()
+    };
   };
 
   /**
    * @param {cheerio} $
-   * @returns {string}
+   * @returns {{ html: {string}, text: {string} }}
    */
   const processBMJ = ($) => {
-    return $('.abstract').text();
+    const $el = $('.abstract');
+
+    return {
+      text: $el.text(),
+      html: $el.html()
+    };
   };
 
   /**
    * @param {cheerio} $
-   * @returns {string}
+   * @returns {{ html: {string}, text: {string} }}
    */
   const processJama = ($) => {
-    return $('.article-full-text').text();
+    const $el = $('.article-full-text');
+
+    return {
+      text: $el.text(),
+      html: $el.html()
+    };
   };
 
   /**
    * @param {cheerio} $
-   * @returns {string}
+   * @returns {{ html: {string}, text: {string} }}
    */
   const processLancet = ($) => {
-    return $('.article__sections').text();
+    const $el = $('.article__sections');
+
+    return {
+      text: $el.text(),
+      html: $el.html()
+    };
   };
 
   const supported = {
@@ -103,18 +143,23 @@ const { createElasticClient } = require('./lib/elastic');
     if (!found) {
       console.log(`Skipping ${url}`);
       if (url.indexOf('https://www.reddit.com') === 0 || url.indexOf('https://reddit.com') === 0) {
-        await mysql.markCrawled(row.id);
+        await mysql.markCrawled(row.id, '');
       }
       return;
     }
 
     await curl.get(url, null, async (err, resp, body) => {
-      if(resp.statusCode === 200){
+      if (err) {
+        console.error(err);
+        await mysql.markCrawled(row.id, '');
+      } else if (resp.statusCode === 200){
         let text;
+        let html;
+
         for (const key in supported) {
           if (url.indexOf(key) === 0) {
             console.log(`${submission_id}: ${url}`);
-            text = supported[key](cheerio.load(body));
+            ({ text, html } = supported[key](cheerio.load(body)));
             break;
           }
         }
@@ -135,7 +180,7 @@ const { createElasticClient } = require('./lib/elastic');
           }
         }
 
-        await mysql.markCrawled(row.id);
+        await mysql.markCrawled(row.id, html);
       } else{
         console.log(`error while fetching ${url}`);
       }

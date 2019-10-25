@@ -36,6 +36,12 @@ class Crawl
 
     /**
      * @var string
+     * @ORM\Column(type="text")
+     */
+    private $html;
+
+    /**
+     * @var string
      *
      * @ORM\Column(name="submission_id", type="string", length=20, nullable=false)
      */
@@ -114,6 +120,26 @@ class Crawl
     public function setIsCrawled(bool $isCrawled): Crawl
     {
         $this->isCrawled = $isCrawled;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHtml(): ?string
+    {
+        return $this->html;
+    }
+
+    /**
+     * @param string $html
+     *
+     * @return Crawl
+     */
+    public function setHtml(string $html): Crawl
+    {
+        $this->html = $html;
 
         return $this;
     }

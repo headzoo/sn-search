@@ -43,13 +43,14 @@ const findUncrawled = () => {
 
 /**
  * @param {number} submissionId
+ * @param {string} html
  * @returns {Promise}
  */
-const markCrawled = (submissionId) => {
+const markCrawled = (submissionId, html) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      'UPDATE `crawl` SET `is_crawled` = 1 WHERE `id` = ? LIMIT 1',
-      [submissionId],
+      'UPDATE `crawl` SET `html` = ?, `is_crawled` = 1 WHERE `id` = ? LIMIT 1',
+      [html, submissionId],
       (err, result) => {
         if (err) {
           reject(err);
