@@ -1,4 +1,4 @@
-const { createElasticClient } = require('./elastic');
+const { createElasticClient } = require('./lib/elastic');
 
 (async () => {
   const elastic = await createElasticClient().catch((err) => {
@@ -37,7 +37,7 @@ const { createElasticClient } = require('./elastic');
     }
   };
 
-  await elastic.indices.putMapping({
+/*  await elastic.indices.putMapping({
     index: 'sn_submissions',
     type:  'submission',
     body:  submissionMappings
@@ -47,7 +47,7 @@ const { createElasticClient } = require('./elastic');
     index: 'sn_comments',
     type:  'comment',
     body:  commentMappings
-  });
+  });*/
 
   await elastic.indices.delete({
     index: 'sn_submissions'
