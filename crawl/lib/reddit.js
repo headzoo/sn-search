@@ -163,26 +163,6 @@ const processComment = async (comment) => {
       }
     });
 
-    const submission = await getSubmission(submissionID)
-      .catch((err) => {
-        if (err.meta.statusCode !== 404) {
-          console.error(err);
-        }
-      });
-    if (submission) {
-      const numComments = await submission.num_comments;
-      await elastic.update({
-        index: 'sn_submissions',
-        id:    submission.body._id,
-        type:  'submission',
-        body:  {
-          doc: {
-            numComments: numComments + 1
-          }
-        }
-      });
-    }
-
     resolve(comment);
   });
 };
@@ -207,6 +187,17 @@ const fetchSubmissions = (fetchMore = true) => {
         foundSubmissionIDs.push(child.id);
         await processSubmission(child);
         await sleep(100);
+      } else {
+        await elastic.update({
+          index: 'sn_submissions',
+          id:    child.id,
+          type:  'submission',
+          body:  {
+            doc: {
+              numComments: child.num_comments
+            }
+          }
+        });
       }
     }
 
