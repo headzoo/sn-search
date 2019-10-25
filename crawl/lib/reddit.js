@@ -170,7 +170,6 @@ const processComment = async (comment) => {
         }
       });
     if (submission) {
-      console.log(submission);
       const numComments = await submission.num_comments;
       await elastic.update({
         index: 'sn_submissions',
@@ -178,7 +177,7 @@ const processComment = async (comment) => {
         type:  'submission',
         body:  {
           doc: {
-            numComments
+            numComments: numComments + 1
           }
         }
       });
