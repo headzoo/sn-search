@@ -163,8 +163,14 @@ const processComment = async (comment) => {
       }
     });
 
-    const submission = await getSubmission(submissionID);
+    const submission = await getSubmission(submissionID)
+      .catch((err) => {
+        if (err.meta.statusCode !== 404) {
+          console.error(err);
+        }
+      });
     if (submission) {
+      console.log(submission);
       const numComments = await submission.num_comments;
       await elastic.update({
         index: 'sn_submissions',
