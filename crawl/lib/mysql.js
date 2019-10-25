@@ -70,7 +70,7 @@ const markCrawled = (submissionId, html) => {
 const insertURL = (submissionId, url) => {
     return new Promise((resolve, reject) => {
         connection.query(
-            'INSERT INTO `crawl` (`submission_id`, `url`, `is_crawled`, `date_created`) VALUES(?, ?, 0, NOW())',
+            "INSERT INTO `crawl` (`submission_id`, `url`, `is_crawled`, `html`, `date_created`) VALUES(?, ?, 0, '', NOW())",
             [submissionId, url],
             (err, result) => {
                 if (err) {
