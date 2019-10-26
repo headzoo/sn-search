@@ -51,7 +51,7 @@ const { createElasticClient } = require('./lib/elastic');
       if (!found) {
         console.log(`Skipping ${url}`);
         if (url.indexOf('https://www.reddit.com') === 0 || url.indexOf('https://reddit.com') === 0) {
-          await mysql.markCrawled(row.id, '');
+          await mysql.markCrawled(row.id, '', '');
         }
         resolve();
         return;
@@ -59,7 +59,7 @@ const { createElasticClient } = require('./lib/elastic');
 
       await curl.get(url, null, async (err, resp, body) => {
         if (err) {
-          await mysql.markCrawled(row.id, '');
+          await mysql.markCrawled(row.id, '', '');
           reject(err);
           return;
         }
@@ -67,6 +67,7 @@ const { createElasticClient } = require('./lib/elastic');
         if (resp.statusCode === 200){
           let text;
           let html;
+          let title;
 
           for (const key in supported) {
             if (url.indexOf(key) === 0) {
@@ -74,6 +75,7 @@ const { createElasticClient } = require('./lib/elastic');
 
               const $   = cheerio.load(body);
               const $el = $(supported[key]);
+              title     = $('title').text();
               text      = $el.text();
               html      = $el.html();
               break;
@@ -89,14 +91,15 @@ const { createElasticClient } = require('./lib/elastic');
                 id:    submission_id,
                 body:  {
                   doc: {
-                    crawled: text
+                    crawled:      text,
+                    crawledTitle: title
                   }
                 }
               });
             }
           }
 
-          await mysql.markCrawled(row.id, html || '');
+          await mysql.markCrawled(row.id, title || '', html || '');
         } else{
           reject(`error while fetching ${url}`);
         }

@@ -43,14 +43,15 @@ const findUncrawled = () => {
 
 /**
  * @param {number} submissionId
+ * @param {string} title
  * @param {string} html
  * @returns {Promise}
  */
-const markCrawled = (submissionId, html) => {
+const markCrawled = (submissionId, title, html) => {
   return new Promise((resolve, reject) => {
     connection.query(
-      'UPDATE `crawl` SET `html` = ?, `is_crawled` = 1 WHERE `id` = ? LIMIT 1',
-      [html, submissionId],
+      'UPDATE `crawl` SET `title` = ?, `html` = ?, `is_crawled` = 1 WHERE `id` = ? LIMIT 1',
+      [title, html, submissionId],
       (err, result) => {
         if (err) {
           reject(err);
@@ -70,7 +71,7 @@ const markCrawled = (submissionId, html) => {
 const insertURL = (submissionId, url) => {
     return new Promise((resolve, reject) => {
         connection.query(
-            "INSERT INTO `crawl` (`submission_id`, `url`, `is_crawled`, `html`, `date_created`) VALUES(?, ?, 0, '', NOW())",
+            "INSERT INTO `crawl` (`submission_id`, `url`, `is_crawled`, `html`, `title`, `date_created`) VALUES(?, ?, 0, '', '', NOW())",
             [submissionId, url],
             (err, result) => {
                 if (err) {

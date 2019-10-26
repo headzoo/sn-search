@@ -10,17 +10,18 @@ const { createElasticClient } = require('./lib/elastic');
   const submissionMappings = {
     submission: {
       properties: {
-        author:      { type: 'keyword' },
-        title:       { type: 'text', boost: 2 },
-        created:     { type: 'date', format: 'epoch_second' },
-        permalink:   { type: 'keyword' },
-        thumbnail:   { type: 'keyword' },
-        numComments: { type: 'integer' },
-        url:         { type: 'keyword' },
-        text:        { type: 'text' },
-        flair:       { type: 'keyword' },
-        domain:      { type: 'keyword' },
-        crawled:     { type: 'text' }
+        author:       { type: 'keyword' },
+        title:        { type: 'text', boost: 2 },
+        created:      { type: 'date', format: 'epoch_second' },
+        permalink:    { type: 'keyword' },
+        thumbnail:    { type: 'keyword' },
+        numComments:  { type: 'integer' },
+        url:          { type: 'keyword' },
+        text:         { type: 'text' },
+        flair:        { type: 'keyword' },
+        domain:       { type: 'keyword' },
+        crawled:      { type: 'text' },
+        crawledTitle: { type: 'text' }
       }
     }
   };

@@ -36,6 +36,13 @@ class Crawl
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="title", type="string", length=255, nullable=false)
+     */
+    private $title;
+
+    /**
+     * @var string
      * @ORM\Column(type="text")
      */
     private $html;
@@ -120,6 +127,26 @@ class Crawl
     public function setIsCrawled(bool $isCrawled): Crawl
     {
         $this->isCrawled = $isCrawled;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     *
+     * @return Crawl
+     */
+    public function setTitle(string $title): Crawl
+    {
+        $this->title = $title;
 
         return $this;
     }
