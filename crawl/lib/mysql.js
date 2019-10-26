@@ -66,7 +66,7 @@ const markCrawled = (submissionId, title, html) => {
   return new Promise((resolve, reject) => {
     connection.query(
       'UPDATE `crawl` SET `title` = ?, `html` = ?, `is_crawled` = 1 WHERE `id` = ? LIMIT 1',
-      [title, html, submissionId],
+      [title.substr(0, 255), html, submissionId],
       (err, result) => {
         if (err) {
           reject(err);
