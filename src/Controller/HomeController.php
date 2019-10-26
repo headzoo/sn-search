@@ -143,7 +143,7 @@ class HomeController extends Controller
             ],
             'sort' => [
                 '_score'  => 'desc',
-                'created' => 'desc'
+                // 'created' => 'desc'
             ]
         ];
         if ($queryString) {
