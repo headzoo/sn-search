@@ -31,26 +31,31 @@ const randomNumber = (min, max) => {
 /**
  * @returns {Promise<void>}
  */
-const initialize = async () => {
-  if (!elastic) {
-    elastic = await createElasticClient().catch((err) => {
-      console.error(err);
-      process.exit(1);
-    });
-  }
-  if (!reddit) {
-    reddit = new RedditAPI({
-      username:              process.env.REDDIT_USER,
-      password:              process.env.REDDIT_PASS,
-      app_id:                process.env.CLIENT_ID,
-      api_secret:            process.env.CLIENT_SECRET,
-      user_agent:            'ScientificNutrition-Scraper',
-      retry_on_wait:         true,
-      retry_on_server_error: 5,
-      retry_delay:           1,
-      logs:                  true
-    });
-  }
+const initialize = () => {
+  return new Promise(async (resolve, reject) => {
+    if (!elastic) {
+      elastic = await createElasticClient().catch((err) => {
+        console.error(err);
+        reject(err);
+      });
+    }
+
+    if (!reddit) {
+      reddit = new RedditAPI({
+        username:              process.env.REDDIT_USER,
+        password:              process.env.REDDIT_PASS,
+        app_id:                process.env.CLIENT_ID,
+        api_secret:            process.env.CLIENT_SECRET,
+        user_agent:            'ScientificNutrition-Scraper',
+        retry_on_wait:         true,
+        retry_on_server_error: 5,
+        retry_delay:           1,
+        logs:                  true
+      });
+    }
+
+    resolve(reddit);
+  });
 };
 
 /**
@@ -79,7 +84,8 @@ const processSubmission = async (submission) => {
           console.error(err);
         }
       });
-    if (found) {
+
+    if (found && found.body.found) {
       await elastic.update({
         index: 'sn_submissions',
         id:    submission.id,
@@ -245,5 +251,7 @@ module.exports = {
   initialize,
   fetchComments,
   fetchSubmissions,
+  processSubmission,
+  processComment,
   getSubmission
 };
