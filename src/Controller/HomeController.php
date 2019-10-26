@@ -140,6 +140,10 @@ class HomeController extends Controller
         $query = [
             'query' => [
                 'bool' => []
+            ],
+            'sort' => [
+                '_score'  => 'desc',
+                'created' => 'desc'
             ]
         ];
         if ($queryString) {
@@ -207,18 +211,18 @@ class HomeController extends Controller
         }
 
         if ((!empty($all['author']) && empty($all['term']))) {
-            $query['sort'] = [
+/*            $query['sort'] = [
                 'created' => 'desc'
-            ];
+            ];*/
         }
 
         if (empty($query['query'])) {
             unset($query['query']);
-            $query['sort'] = [
+/*            $query['sort'] = [
                 'created' => 'desc'
-            ];
+            ];*/
         }
-
+        //dump($query);die();
         return $query;
     }
 

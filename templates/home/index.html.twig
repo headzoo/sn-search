@@ -25,6 +25,14 @@
               value="{{ term }}"
               placeholder="Search terms..."
             />
+            <label for="type-input" class="sr-only">
+              Type
+            </label>
+            <select name="type" id="type-input" class="form-control" style="width: 200px;">
+              <option value="s">Submissions</option>
+              <option value="c">Comments</option>
+              <option value="sc">Submissions and Comments</option>
+            </select>
             <button type="submit" class="btn btn-primary">
               Search
             </button>
