@@ -1,9 +1,15 @@
 #!/usr/bin/env node
 const curl    = require('curl');
 const cheerio = require('cheerio');
+const commandLineArgs = require('command-line-args');
 const mysql   = require('./lib/mysql');
 const reddit  = require('./lib/reddit');
 const { createElasticClient } = require('./lib/elastic');
+
+const optionDefinitions = [
+  { name: 'url', alias: 'u', type: String }
+];
+const options = commandLineArgs(optionDefinitions);
 
 (async () => {
   await reddit.initialize();
@@ -12,8 +18,8 @@ const { createElasticClient } = require('./lib/elastic');
   const supported = {
     'https://www.ncbi.nlm.nih.gov/pubmed':               '.abstr div',
     'https://www.ncbi.nlm.nih.gov/m/pubmed':             '.no_t_m',
-    'https://www.ncbi.nlm.nih.gov/pmc/article':          '.article p',
     'https://www.ncbi.nlm.nih.gov/pmc/articles':         '.tsec',
+    'https://www.ncbi.nlm.nih.gov/pmc/article':          '.article p',
     'https://www.sciencedirect.com/science/article/pii': '.abstract div',
     'https://academic.oup.com':                          '.abstract',
     'https://jamanetwork.com/journals/jama':             '.article-full-text',
@@ -30,6 +36,44 @@ const { createElasticClient } = require('./lib/elastic');
     'https://annals.org/aim/fullarticle':                '.abstract',
     'https://care.diabetesjournals.org/content':         '.article',
     'https://www.sciencedaily.com/releases':             '#story_text'
+  };
+
+  /**
+   * @param {string} url
+   * @returns {Promise}
+   */
+  const fetch = (url) => {
+    return new Promise(async (resolve, reject) => {
+      curl.get(url, null, (err, resp, body) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        if (resp.statusCode === 200){
+          let text;
+          let html;
+          let title;
+
+          for (const key in supported) {
+            if (url.indexOf(key) === 0) {
+              const $   = cheerio.load(body);
+              const $el = $(supported[key]);
+              title     = $('title').text();
+              text      = $el.text();
+              html      = $el.html();
+              break;
+            }
+          }
+
+          resolve({
+            title, text, html
+          });
+        } else{
+          reject(`error while fetching ${url}`);
+        }
+      });
+    });
   };
 
   /**
@@ -108,6 +152,14 @@ const { createElasticClient } = require('./lib/elastic');
       });
     });
   };
+
+  if (options.url) {
+    const rows = await mysql.findByURL(options.url);
+    if (rows.length > 0) {
+      await crawl(rows[0]);
+    }
+    process.exit(0);
+  }
 
   mysql.findUncrawled()
     .then(async (rows) => {
