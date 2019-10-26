@@ -29,6 +29,21 @@ const findByURL = (url) => {
 /**
  * @returns {Promise}
  */
+const findAll = () => {
+  return new Promise((resolve, reject) => {
+    connection.query('SELECT * FROM `crawl`', [], (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+};
+
+/**
+ * @returns {Promise}
+ */
 const findUncrawled = () => {
   return new Promise((resolve, reject) => {
     connection.query('SELECT * FROM `crawl` WHERE `is_crawled` = 0', [], (err, result) => {
@@ -89,5 +104,6 @@ module.exports = {
   findByURL,
   insertURL,
   markCrawled,
+  findAll,
   findUncrawled
 };

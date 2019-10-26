@@ -7,7 +7,8 @@ const reddit  = require('./lib/reddit');
 const { createElasticClient } = require('./lib/elastic');
 
 const optionDefinitions = [
-  { name: 'url', alias: 'u', type: String }
+  { name: 'url', alias: 'u', type: String },
+  { name: 'recrawl', type: Boolean }
 ];
 const options = commandLineArgs(optionDefinitions);
 
@@ -161,14 +162,25 @@ const options = commandLineArgs(optionDefinitions);
     process.exit(0);
   }
 
-  mysql.findUncrawled()
-    .then(async (rows) => {
-      for(let i = 0; i < rows.length; i++) {
-        await crawl(rows[i]).catch((err) => {
-          console.error(err);
-        });
-      }
-    });
+  if (options.recrawl) {
+    mysql.findAll()
+      .then(async (rows) => {
+        for(let i = 0; i < rows.length; i++) {
+          await crawl(rows[i]).catch((err) => {
+            console.error(err);
+          });
+        }
+      });
+  } else {
+    mysql.findUncrawled()
+      .then(async (rows) => {
+        for(let i = 0; i < rows.length; i++) {
+          await crawl(rows[i]).catch((err) => {
+            console.error(err);
+          });
+        }
+      });
+  }
 })();
 
 
