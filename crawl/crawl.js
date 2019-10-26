@@ -110,19 +110,27 @@ const options = commandLineArgs(optionDefinitions);
         }
 
         if (resp.statusCode === 200){
-          let text;
-          let html;
-          let title;
+          let text = '';
+          let html = '';
+          let title = '';
 
           for (const key in supported) {
             if (url.indexOf(key) === 0) {
               console.log(`${submission_id}: ${url}`);
 
-              const $   = cheerio.load(body);
-              const $el = $(supported[key]);
-              title     = $('title').text();
-              text      = $el.text();
-              html      = $el.html();
+              const $ = cheerio.load(body);
+              let $el;
+              if (typeof supported[key] === 'function') {
+                $el = supported[key]($);
+              } else {
+                $el = $(supported[key]);
+              }
+
+              title = $('title').text();
+              html  = $el.html();
+              $el.find('*').each((i, el) => {
+                text += $(el).text() + "\n";
+              });
               break;
             }
           }
