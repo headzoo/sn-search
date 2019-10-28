@@ -54,7 +54,7 @@
         <h3>{{ result.crawledTitle|default|highlight(t) }}</h3>
         {{ result.crawled|highlight(t) }}
         {% if result.url %}
-          <a href="{{ result.url }}" target="_blank">Read more</a>
+          <a href="{{ result.url }}" target="_blank" class="d-block">Read more</a>
         {% endif %}
       </blockquote>
     {% endif %}
