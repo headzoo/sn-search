@@ -33,6 +33,8 @@ const randomNumber = (min, max) => {
  */
 const initialize = () => {
   return new Promise(async (resolve, reject) => {
+    mysql.connect();
+
     if (!elastic) {
       elastic = await createElasticClient().catch((err) => {
         console.error(err);
@@ -80,6 +82,7 @@ const processSubmission = async (submission) => {
 
     const found = await getSubmission(submission.id)
       .catch((err) => {
+        console.error(err);
         if (err.meta.statusCode !== 404) {
           console.error(err);
         }

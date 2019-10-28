@@ -1,14 +1,35 @@
 require('dotenv').config();
 
-const mysql      = require('mysql');
-const connection = mysql.createConnection({
+const mysql = require('mysql');
+
+let connection;
+
+/**
+ *
+ */
+const connect = () => {
+  connection = mysql.createConnection({
     host     : process.env.MYSQL_HOST,
     user     : process.env.MYSQL_USER,
     password : process.env.MYSQL_PASS,
     database : process.env.MYSQL_NAME
-});
+  });
+  connection.connect();
+  connection.on('error', (err) => {
+    if(err.code === 'PROTOCOL_CONNECTION_LOST') {
+      connect();
+    } else {
+      throw err;
+    }
+  });
+};
 
-connection.connect();
+/**
+ * @returns {*}
+ */
+const getConnection = () => {
+  return connection;
+};
 
 /**
  * @param {string} url
@@ -100,7 +121,8 @@ const insertURL = (submissionId, url) => {
 };
 
 module.exports = {
-  connection,
+  connect,
+  getConnection,
   findByURL,
   insertURL,
   markCrawled,
