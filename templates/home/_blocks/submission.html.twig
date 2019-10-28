@@ -53,6 +53,9 @@
       <blockquote class="search-result-quote">
         <h3>{{ result.crawledTitle|default|highlight(t) }}</h3>
         {{ result.crawled|highlight(t) }}
+        {% if result.url %}
+          <a href="{{ result.url }}" target="_blank">Read more</a>
+        {% endif %}
       </blockquote>
     {% endif %}
   </div>
