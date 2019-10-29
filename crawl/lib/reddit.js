@@ -82,7 +82,6 @@ const processSubmission = async (submission) => {
 
     const found = await getSubmission(submission.id)
       .catch((err) => {
-        console.error(err);
         if (err.meta.statusCode !== 404) {
           console.error(err);
         }
@@ -249,9 +248,59 @@ const fetchComments = (fetchMore = true) => {
   });
 };
 
+/**
+ * @param {boolean} fetchMore
+ */
+const fetchRemoved = (fetchMore = true) => {
+  reddit.api.get('/r/ScientificNutrition/about/spam.json', {
+    limit: 100
+  }).then(async (resp) => {
+    const [status, data] = resp;
+
+    if (status !== 200) {
+      // @todo
+    }
+
+    const { children } = data.data;
+    for(let i = 0; i < children.length; i++) {
+      const child = children[i].data;
+      if (child.name.indexOf('t1_') === 0) {
+        console.log(`Removing comment ${child.id}`);
+        await elastic.delete({
+          index: 'sn_comments',
+          id:    child.id,
+          type:  'comment'
+        }).catch((err) => {
+          if (err.meta.statusCode !== 404) {
+            console.error(err);
+          }
+        });
+      } else if (child.name.indexOf('t3_') === 0) {
+        console.log(`Removing submission ${child.id}`);
+        await elastic.delete({
+          index: 'sn_submissions',
+          id:    child.id,
+          type:  'submission'
+        }).catch((err) => {
+          if (err.meta.statusCode !== 404) {
+            console.error(err);
+          }
+        });
+      }
+    }
+
+    if (fetchMore) {
+      setTimeout(fetchRemoved, randomNumber(60000, 90000));
+    }
+  }).catch((err) => {
+    console.error(err);
+  });
+};
+
 module.exports = {
   sleep,
   initialize,
+  fetchRemoved,
   fetchComments,
   fetchSubmissions,
   processSubmission,
