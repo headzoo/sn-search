@@ -15,13 +15,13 @@ const connect = () => {
     database : process.env.MYSQL_NAME
   });
   connection.connect();
-  connection.on('error', (err) => {
+/*  connection.on('error', (err) => {
     if(err.code === 'PROTOCOL_CONNECTION_LOST') {
       connect();
     } else {
       throw err;
     }
-  });
+  });*/
 };
 
 /**
